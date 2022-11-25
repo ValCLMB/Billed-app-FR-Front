@@ -28,7 +28,7 @@ export default class NewBill {
 
     const fileType = file.type.split("/")[1];
 
-    if (/\.(jpe?g|png)$/i.test(fileType)) {
+    if (/\.(jpe?g|png)$/.test(fileType)) {
       formData.append("file", file);
       formData.append("email", email);
 
