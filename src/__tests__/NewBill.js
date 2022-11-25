@@ -2,6 +2,7 @@
  * @jest-environment jsdom
  */
 
+import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import { fireEvent, screen, getBytestId } from "@testing-library/dom";
 import NewBillUI from "../views/NewBillUI.js";
@@ -23,7 +24,7 @@ beforeEach(() => {
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on NewBill Page", () => {
-    test("Then I can upload a file with the good extension", () => {
+    test("Then I can't upload a file with extension different than png,jpg or jpeg", () => {
       const newBill = new NewBill({
         document,
         onNavigate,
@@ -36,14 +37,13 @@ describe("Given I am connected as an employee", () => {
       const input = screen.getByTestId("file");
       input.addEventListener("change", handleChangeFile);
 
-      fireEvent.change(input, {
-        target: {
-          files: [new File(["file.png"], "file.png", { type: "image/png" })],
-        },
-      });
+      userEvent.upload(
+        input,
+        new File(["file.txt"], "file.txt", { type: "text/plain" })
+      );
 
       expect(handleChangeFile).toHaveBeenCalled();
-      expect(input.files[0].name).toBe("file.png");
+      expect(input.value).toBe("");
     });
   });
 });
